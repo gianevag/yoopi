@@ -23,7 +23,7 @@ export class EmailerService {
         subject: 'Thank you for your feedback ❤️ get your discount coupon',
         template: './qrCodeEmail',
         context: {
-            qrCode: `${baseUrl}/images/${qrCode}`,
+            qrCode: `${baseUrl}/api/images/${qrCode}`,
             code,
         },
         });

@@ -12,14 +12,14 @@ export class UsersController {
 
     @Post("/create-review")
     async createUserReview(@Body(new ValidationPipe()) body: UserDto, @Req() req: Request) {
-        const baseUrl = `${req.protocol}://${req.get('Host')}`
+        const baseUrl = `https://${req.get('Host')}`
         await this.emailerService.sendUserPromotionCode(body, baseUrl)
         return "OK"
     }
 
     @Post("/create-negative-review")
     async createNegativeReview(@Body(new ValidationPipe()) body: NegativeReviewDto, @Req() req: Request) { 
-        const baseUrl = `${req.protocol}://${req.get('Host')}`
+        const baseUrl = `https://${req.get('Host')}`
         //await this.emailerService.sendUserPromotionCode(body, baseUrl)
         await this.usersService.updateUserReview(body)
         return "OK"
@@ -27,7 +27,7 @@ export class UsersController {
 
     @Post("/create-google-review")    
     async createGoogleReview(@Body(new ValidationPipe()) body: GoogleReviewDto, @Req() req: Request) {
-        const baseUrl = `${req.protocol}://${req.get('Host')}`
+        const baseUrl = `https://${req.get('Host')}`
         await this.emailerService.sendUserPromotionCode(body, baseUrl)
         await this.usersService.updateUserReview(body)
         return {
@@ -38,7 +38,7 @@ export class UsersController {
 
     @Post("/create-tripadvisor-review")
     async createTripadvisorReview(@Body(new ValidationPipe()) body: TripadvisorReviewDto, @Req() req: Request) { 
-        const baseUrl = `${req.protocol}://${req.get('Host')}`
+        const baseUrl = `https://${req.get('Host')}`
         await this.emailerService.sendUserPromotionCode(body, baseUrl)
         await this.usersService.updateUserReview(body)
         return {
