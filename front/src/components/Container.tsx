@@ -221,8 +221,7 @@ export const Container = () => {
                 }
                 console.log(data)
                 axios({ ...POST.NEGATIVE_REVIEW, data })
-                    .then((res) => {
-                        window.location.href = res?.data?.redirect
+                    .then(() => {
                         dispatch({ type: ACTIONS.SUBMITFORM })
                     })
                     .catch((e) => {

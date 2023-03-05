@@ -20,7 +20,7 @@ export class UsersController {
     @Post("/create-negative-review")
     async createNegativeReview(@Body(new ValidationPipe()) body: NegativeReviewDto, @Req() req: Request) { 
         const baseUrl = `https://${req.get('Host')}`
-        //await this.emailerService.sendUserPromotionCode(body, baseUrl)
+        await this.emailerService.sendUserPromotionCode(body, baseUrl)
         await this.usersService.updateUserReview(body)
         return "OK"
     }
