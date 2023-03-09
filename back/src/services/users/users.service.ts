@@ -11,6 +11,10 @@ export class UsersService {
 
     constructor(@InjectModel("Users") private userModel: Model<UserDocument>, private qrCodeService: QrCodeService) {}
 
+    async verifyCode(code: string) { 
+        await this.userModel.updateOne({"promotionCodes.code": code.toString()}, {$set: {"promotionCodes.$.hasVerified": true}})
+    }
+
     async create(userDto: UserDto): Promise<User> {
         const createdUser = new this.userModel(userDto);
         return createdUser.save();
@@ -30,7 +34,6 @@ export class UsersService {
     }
 
     async updateUserReview(review: NegativeReviewDto | GoogleReviewDto | TripadvisorReviewDto ): Promise<void> {
-        console.log(flatten(review))
         await this.userModel.updateOne({ email: review.email }, { $set: review}, {upsert: true})
 
     }

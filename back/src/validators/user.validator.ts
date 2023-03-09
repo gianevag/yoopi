@@ -12,6 +12,37 @@ import { UserDocument } from 'src/schemas/user.schema';
 
 @ValidatorConstraint({ async: true })
 @Injectable()
+export class hasVerifyCodeDbConstraint implements ValidatorConstraintInterface {
+    constructor(@InjectModel("Users") private userModel: Model<UserDocument>) { }
+    async validate(userName: string, args: ValidationArguments) {
+      const res = await this.userModel.aggregate([
+        {$match: {"promotionCodes.code": args.object["code"]}},
+        {$unwind: "$promotionCodes"},
+        {
+          $match: {
+            "promotionCodes.code": args.object["code"],
+            "promotionCodes.hasVerified": false
+          }
+        }
+      ])
+    return res.length > 0
+  };
+}
+  
+export function HasVerifyCode(validationOptions?: ValidationOptions) {
+  return function (object: Object, propertyName: string) {
+      registerDecorator({
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      constraints: [],
+      validator: hasVerifyCodeDbConstraint,
+    });
+  };
+} 
+
+@ValidatorConstraint({ async: true })
+@Injectable()
 export class IsExistInDbConstraint implements ValidatorConstraintInterface {
     constructor(@InjectModel("Users") private userModel: Model<UserDocument>) { }
     validate(userName: string, args: ValidationArguments) {
@@ -26,7 +57,6 @@ export class IsExistInDbConstraint implements ValidatorConstraintInterface {
       })
     };
 }
-
 
 export function IsExistInDb(property: string, validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {

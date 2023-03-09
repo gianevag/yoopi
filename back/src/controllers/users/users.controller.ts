@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Redirect, Req, Res } from '@nestjs/common';
-import { GoogleReviewDto, NegativeReviewDto, TripadvisorReviewDto, UserDto } from 'src/dto/user.dto';
+import { GoogleReviewDto, NegativeReviewDto, TripadvisorReviewDto, UserDto, VerifyCodeDto } from 'src/dto/user.dto';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { EmailerService } from 'src/services/emailer/emailer.service';
 import { Request } from 'express';
@@ -45,4 +45,12 @@ export class UsersController {
             redirect: "https://www.tripadvisor.com/"
         }
     }
+
+    @Post("/verify-code")
+    async verifyCode(@Body(new ValidationPipe()) body: VerifyCodeDto) { 
+        await this.usersService.verifyCode(body.code)
+        return "OK"
+    }
+
+
 }

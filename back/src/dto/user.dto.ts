@@ -1,5 +1,5 @@
-import { IsEmail, IsIn, IsBoolean, IsOptional} from 'class-validator';
-import { HasSubmittedProps, IsExistInDb, IsExistOtherProp } from 'src/validators/user.validator';
+import { IsEmail, IsIn, IsBoolean, IsOptional, IsString} from 'class-validator';
+import { HasSubmittedProps, HasVerifyCode, IsExistInDb, IsExistOtherProp } from 'src/validators/user.validator';
 
 export type experienceType = "positive" | "negative"
 
@@ -78,5 +78,12 @@ export class TripadvisorReviewDto extends UserDto {
     @IsExistInDb('clickedTripadvison', { message: 'You have already given us a Tripadvisor evaluation.' })
     clickedTripadvison: boolean
 
+}
+
+export class VerifyCodeDto { 
+    
+    @IsString()
+    @HasVerifyCode({ message: 'Code has been verified.' })
+    code: string;
 }
 
