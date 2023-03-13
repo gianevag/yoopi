@@ -1,9 +1,10 @@
-import { Body, Controller, Post, Redirect, Req, Res } from '@nestjs/common';
-import { GoogleReviewDto, NegativeReviewDto, TripadvisorReviewDto, UserDto, VerifyCodeDto } from 'src/dto/user.dto';
+import { Body, Controller, Post, Redirect, Req, Res, UseGuards } from '@nestjs/common';
+import { GoogleReviewDto, NegativeReviewDto, signInDto, TripadvisorReviewDto, UserDto, VerifyCodeDto } from 'src/dto/user.dto';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { EmailerService } from 'src/services/emailer/emailer.service';
 import { Request } from 'express';
 import { UsersService } from 'src/services/users/users.service';
+import { AuthGuard } from 'src/services/auth/auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -46,10 +47,25 @@ export class UsersController {
         }
     }
 
+
+    @UseGuards(AuthGuard)
     @Post("/verify-code")
     async verifyCode(@Body(new ValidationPipe()) body: VerifyCodeDto) { 
         await this.usersService.verifyCode(body.code)
         return "OK"
+    }
+
+
+    @Post("/sign-in")
+    async signIn(@Body() body: signInDto, ) { 
+        const token = await this.usersService.createToken(body.username, body.password)
+        return token;
+    }
+
+    @Post("/log-in")
+    async logIn(@Body() body: signInDto) { 
+        const token = await this.usersService.getTokenByUsernamePass(body.username, body.password)
+        return token;
     }
 
 

@@ -87,3 +87,12 @@ export class VerifyCodeDto {
     code: string;
 }
 
+export class signInDto { 
+
+    @IsString()
+    username: string;
+
+    @IsString()
+    password: string
+
+}

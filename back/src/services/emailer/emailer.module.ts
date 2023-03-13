@@ -31,7 +31,7 @@ import { QrCodeService } from '../qr-code/qr-code.service';
       },
     }),
   ],
-  providers: [EmailerService, UsersService, { provide: getModelToken("Users"), useValue: {} }, QrCodeService],
+  providers: [EmailerService, UsersService, { provide: getModelToken("Users"), useValue: {} }, { provide: getModelToken("UserAdmin"), useValue: {} }, QrCodeService],
   exports: [EmailerService],
 })
 export class EMailerModule {}
